@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from "mongoose";
-import spotsRouter from "./routes/spots.js"
-import cors from "cors";
+import pokemonRouter from "./routes/pokemon.js"
+
 
 
 const app = express()
@@ -37,23 +37,23 @@ app.use((req, res, next)=>{
     }
 })
 
-
-app.options('/spots', (req, res) => {
+//middleware die zegt dat content type alleen application/json mag zijn
+app.use((req, res, next) => {
+    res.setHeader('Content-Type', 'application/json');
+    next();
+});
+app.options('/pokemon', (req, res) => {
     res.header('Allow', 'GET, POST, OPTIONS');
     res.status(204).send(); // 204 betekent "No Content"
 });
 
 
-app.options('/spots/:id', (req, res) => {
+app.options('/pokemon/:id', (req, res) => {
     res.header('Allow', 'GET, PUT, DELETE, OPTIONS');
     res.status(204).send();
 });
 
-app.get('/', (req, res) =>{
-    res.json({message: 'welcome'})
-})
-
-app.use('/spots', spotsRouter)
+app.use('/pokemon', pokemonRouter)
 
 app.listen(process.env.EXPRESS_PORT, ()=>{
     console.log("server is gestart")
